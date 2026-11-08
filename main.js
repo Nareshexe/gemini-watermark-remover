@@ -1125,26 +1125,41 @@ function initImageRemover() {
 
   const currentSettings = { gain: 0.6, offsetX: -128, offsetY: -128, sizeScale: 1 };
 
+  let loaderEl = dropzone.querySelector('.dropzone-loader');
+
   function setDropzoneLoading(loading, message = 'Processing image...') {
     isProcessing = loading;
     if (loading) {
       dropzone.classList.add('loading');
-      dropzone.innerHTML = `
-        <div class="dropzone-loader">
+      if (!loaderEl) {
+        loaderEl = document.createElement('div');
+        loaderEl.className = 'dropzone-loader';
+        loaderEl.innerHTML = `
           <div class="dropzone-spinner"></div>
-          <p class="dropzone-title text-indigo-600">${message}</p>
+          <p class="dropzone-title text-indigo-600"></p>
           <p class="dropzone-sub">Please wait, analyzing watermark...</p>
-        </div>
-      `;
+        `;
+        dropzone.appendChild(loaderEl);
+      }
+      const titleEl = loaderEl.querySelector('.dropzone-title');
+      if (titleEl) titleEl.textContent = message;
+      loaderEl.classList.remove('hidden');
+
+      Array.from(dropzone.children).forEach(child => {
+        if (child !== fileInput && child !== loaderEl) {
+          child.classList.add('hidden');
+        }
+      });
     } else {
       dropzone.classList.remove('loading');
-      dropzone.innerHTML = `
-        <div class="dropzone-icon">
-          <iconify-icon icon="ph:upload-simple-bold"></iconify-icon>
-        </div>
-        <p class="dropzone-title">Upload or drag your Gemini Image</p>
-        <p class="dropzone-sub">Supports PNG, JPG, WebP</p>
-      `;
+      if (loaderEl) {
+        loaderEl.classList.add('hidden');
+      }
+      Array.from(dropzone.children).forEach(child => {
+        if (child !== fileInput && child !== loaderEl) {
+          child.classList.remove('hidden');
+        }
+      });
     }
   }
 
@@ -1491,26 +1506,41 @@ function initVideoRemover() {
 
   const currentSettings = { gain: 0.6, offsetX: -24, offsetY: -24, sizeScale: 1 };
 
+  let loaderEl = dropzone.querySelector('.dropzone-loader');
+
   function setDropzoneLoading(loading, message = 'Extracting best frame...') {
     isProcessing = loading;
     if (loading) {
       dropzone.classList.add('loading');
-      dropzone.innerHTML = `
-        <div class="dropzone-loader">
+      if (!loaderEl) {
+        loaderEl = document.createElement('div');
+        loaderEl.className = 'dropzone-loader';
+        loaderEl.innerHTML = `
           <div class="dropzone-spinner"></div>
-          <p class="dropzone-title text-indigo-600">${message}</p>
+          <p class="dropzone-title text-indigo-600"></p>
           <p class="dropzone-sub">Scanning video frames & auto-detecting watermark...</p>
-        </div>
-      `;
+        `;
+        dropzone.appendChild(loaderEl);
+      }
+      const titleEl = loaderEl.querySelector('.dropzone-title');
+      if (titleEl) titleEl.textContent = message;
+      loaderEl.classList.remove('hidden');
+
+      Array.from(dropzone.children).forEach(child => {
+        if (child !== fileInput && child !== loaderEl) {
+          child.classList.add('hidden');
+        }
+      });
     } else {
       dropzone.classList.remove('loading');
-      dropzone.innerHTML = `
-        <div class="dropzone-icon">
-          <iconify-icon icon="ph:video-bold"></iconify-icon>
-        </div>
-        <p class="dropzone-title">Upload or drag a Gemini Veo 3 video</p>
-        <p class="dropzone-sub">Supports MP4, WebM, MOV</p>
-      `;
+      if (loaderEl) {
+        loaderEl.classList.add('hidden');
+      }
+      Array.from(dropzone.children).forEach(child => {
+        if (child !== fileInput && child !== loaderEl) {
+          child.classList.remove('hidden');
+        }
+      });
     }
   }
 
